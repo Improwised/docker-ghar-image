@@ -1,6 +1,6 @@
 # GHAR (DinD) runner image
 
-GitHub Actions D-in-D image for Self-Hoster runner based on [summerwind/actions-runner-dind](https://hub.docker.com/r/summerwind/actions-runner-dind)
+D-in-D image for GitHub Actions Self-Hoster runner based on [summerwind/actions-runner-dind](https://hub.docker.com/r/summerwind/actions-runner-dind)
 
 ## Packages
 
