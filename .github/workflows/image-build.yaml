@@ -2,7 +2,7 @@ name: image-build
 on:
   push:
     branches:
-      - "main"
+      - "feat/go_version_upgrade"
     paths:
       - "Dockerfile"
       - ".github/workflows/image-build.yaml"
@@ -50,6 +50,6 @@ jobs:
         timeout-minutes: 5
         with:
           context: .
-          push: true
+          push: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
