@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - "main"
-      - "update-base-images"
     paths:
       - "Dockerfile"
       - ".github/workflows/image-build.yaml"
@@ -53,6 +52,6 @@ jobs:
           context: .
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          push: false
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
