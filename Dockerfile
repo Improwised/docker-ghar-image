@@ -25,3 +25,4 @@ RUN set -ex; \
 ENV PATH="/usr/local/go/bin:${PATH}"
 USER runner
 ENV PATH="/usr/local/go/bin:${PATH}"
+RUN echo PATH=$PATH >> /runnertmp/.env
