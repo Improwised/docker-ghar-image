@@ -2,11 +2,14 @@ name: image-build
 on:
   push:
     branches:
-      - "main"
+      - "jdk"
     paths:
       - "Dockerfile"
       - ".github/workflows/image-build.yaml"
       - "!**.md"
+  pull_request:
+    branches:
+      - "jdk"
 
 jobs:
   image-build:
@@ -18,40 +21,30 @@ jobs:
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
-        timeout-minutes: 5
         with:
           images: improwised/ghar-image
           tags: |
             type=raw,value={{branch}}-{{sha}}-{{date 'X'}}
-            type=raw,value=latest
-          labels: |
-            org.opencontainers.image.title=ghar-image
-            org.opencontainers.image.base.name=summerwind/actions-runner-dind
-            org.opencontainers.image.vendor=improwised
-            org.opencontainers.image.authors=pratikbalar
-            org.opencontainers.image.licenses=Apache-2.0
-            org.opencontainers.image.description=github actions self hosted runner image
-            org.opencontainers.image.version={{version}}
-            org.opencontainers.image.source=https://github.com/Improwised/docker-ghar-image
-
+            type=raw,value={{branch}}-latest
+        timeout-minutes: 5
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         timeout-minutes: 5
-
       - name: Login to DockerHub
+        if: ${{ github.ref_name == 'jdk' }}
         uses: docker/login-action@v3
         timeout-minutes: 5
         with:
           username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
       - name: Build and push
         uses: docker/build-push-action@v5
-        timeout-minutes: 5
         with:
           context: .
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          push: true
+          push: ${{ github.ref_name == 'jdk' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          annotations: ${{ steps.meta.outputs.annotations }}
+        timeout-minutes: 5
