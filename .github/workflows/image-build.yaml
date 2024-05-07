@@ -24,27 +24,15 @@ jobs:
           tags: |
             type=raw,value={{branch}}-{{sha}}-{{date 'X'}}
             type=raw,value=latest
-          labels: |
-            org.opencontainers.image.title=ghar-image
-            org.opencontainers.image.base.name=summerwind/actions-runner-dind
-            org.opencontainers.image.vendor=improwised
-            org.opencontainers.image.authors=pratikbalar
-            org.opencontainers.image.licenses=Apache-2.0
-            org.opencontainers.image.description=github actions self hosted runner image
-            org.opencontainers.image.version={{version}}
-            org.opencontainers.image.source=https://github.com/Improwised/docker-ghar-image
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         timeout-minutes: 5
-
       - name: Login to DockerHub
         uses: docker/login-action@v3
         timeout-minutes: 5
         with:
           username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
       - name: Build and push
         uses: docker/build-push-action@v5
         timeout-minutes: 5
