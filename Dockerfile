@@ -1,5 +1,5 @@
 FROM docker.io/docker/buildx-bin:0.14.1 AS buildx
-FROM node:20.11.0 AS node
+FROM node:22.3.0 AS node
 FROM docker.io/summerwind/actions-runner-dind:v2.316.1-ubuntu-22.04
 USER root
 RUN apt-get update \
