@@ -45,9 +45,9 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: ${{ github.ref_name == 'jdk' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          annotations: ${{ steps.meta.outputs.annotations }}
+          tags: test
+          labels: test
+          annotations: test
         timeout-minutes: 5
       - name: Build and push
         uses: docker/build-push-action@v5
