@@ -20,6 +20,16 @@ jobs:
         timeout-minutes: 5
       - name: Docker meta
         id: meta
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: docker/metadata-action@v5
+        with:
+          images: improwised/ghar-image
+          tags: |
+            type=sha,prefix={{base_ref}}-,suffix=-{{date 'X'}}
+            type=raw,prefix={{base_ref}}-,value=latest
+      - name: Docker meta
+        id: meta
+        if: ${{ github.event_name == 'push' }}
         uses: docker/metadata-action@v5
         with:
           images: improwised/ghar-image
