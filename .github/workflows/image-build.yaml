@@ -34,8 +34,8 @@ jobs:
         with:
           images: improwised/ghar-image
           tags: |
-            type=raw,value={{branch}}-{{sha}}-{{date 'X'}}
-            type=raw,value={{branch}}-latest
+            type=sha,prefix={{branch}}-,suffix=-{{date 'X'}} # value={{branch}}-{{sha}}-{{date 'X'}}
+            type=raw,prefix={{branch}}-,value=latest
         timeout-minutes: 5
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -47,8 +47,21 @@ jobs:
         with:
           username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build Check
+        uses: docker/build-push-action@v5
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          context: .
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          push: ${{ github.ref_name == 'jdk' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          annotations: ${{ steps.meta.outputs.annotations }}
+        timeout-minutes: 5
       - name: Build and push
         uses: docker/build-push-action@v5
+        if: ${{ github.event_name == 'push' }}
         with:
           context: .
           cache-from: type=gha
