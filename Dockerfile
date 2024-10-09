@@ -1,6 +1,6 @@
 FROM docker/buildx-bin:0.17.1 AS buildx
 FROM node:20.11.0 AS node
-FROM summerwind/actions-runner-dind:v2.319.1-ubuntu-22.04
+FROM summerwind/actions-runner-dind:v2.320.0-ubuntu-22.04
 USER root
 RUN apt-get update \
   && apt-get install -y wget openjdk-11-jdk maven \
