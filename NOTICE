@@ -1,0 +1,23 @@
+Copyright 2024 Improwised Technologies Pvt. Ltd.
+
+This product includes software developed at Improwised Technologies Pvt. Ltd. and is licensed under the Apache License, Version 2.0. You may obtain a copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+This product also includes software and dependencies obtained from the following sources:
+
+1. Docker Images:
+    - Buildx (docker.io/docker/buildx-bin:0.19.1)
+    Licensed under the Apache License 2.0.
+    See: https://github.com/docker/buildx
+    - Summerwind GitHub Actions Runner (docker.io/summerwind/actions-runner-dind:v2.321.0-ubuntu-22.04)
+    Licensed under the MIT License.
+    See: https://github.com/summerwind/actions-runner-controller
+    - Node.js (docker.io/node:20.11.0)
+    Licensed under the MIT License.
+    See: https://github.com/nodejs/node/
+
+2. Dependencies:
+
+    - Azure CLI (via https://aka.ms/InstallAzureCLIDeb) Licensed under the MIT License. See https://github.com/Azure/azure-cli
+    - Various PHP extensions and libraries installed via `apt-get` are governed by their respective licenses. Please refer to the relevant upstream package repositories for details.

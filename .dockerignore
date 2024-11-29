@@ -1,0 +1,18 @@
+# Git
+.git
+.gitignore
+
+# Docker
+.dockerignore
+Dockerfile
+
+# GitHub files
+.github/
+
+# Documentation, License and NOTICE
+*.md
+LICENSE
+NOTICE
+
+# IDE config files
+.editorconfig
