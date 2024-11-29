@@ -4,7 +4,7 @@ A Docker-in-Docker (DinD) image for GitHub Actions self-hosted runners, based on
 
 This repository contains a Dockerfile for building a customized **GitHub Actions Runner** image. The image includes additional tools and dependencies required for running workflows in a GitHub Actions environment.
 
-![GitHub last commit](https://img.shields.io/github/last-commit/improwised/docker-ghar-image)
+![GitHub last commit](https://img.shields.io/github/last-commit/improwised/docker-ghar-image/jdk)
 ![Image Build](https://github.com/Improwised/docker-ghar-image/actions/workflows/image-build.yaml/badge.svg/?branch=jdk)
 ![Docker Pulls](https://img.shields.io/docker/pulls/improwised/ghar-image)
 ![GitHub License](https://img.shields.io/github/license/improwised/docker-ghar-image)
