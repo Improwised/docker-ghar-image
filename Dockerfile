@@ -1,3 +1,6 @@
+# Use default versions for jdk
+ARG JDK_VERSION=11
+
 # Stage 1: Buildx
 FROM docker/buildx-bin:0.19.1 AS buildx
 
@@ -12,7 +15,7 @@ USER root
 
 # Install required packages and Azure CLI
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    wget openjdk-11-jdk maven \
+    wget openjdk-${JDK_VERSION}-jdk maven \
     && curl -sL https://aka.ms/InstallAzureCLIDeb | bash \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
