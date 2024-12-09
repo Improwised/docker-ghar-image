@@ -1,5 +1,5 @@
 # Use default versions for jdk
-ARG JDK_VERSION=11
+ARG JDK_VERSION="11"
 
 # Stage 1: Buildx
 FROM docker/buildx-bin:0.19.1 AS buildx
