@@ -16,8 +16,8 @@ This repository contains a Dockerfile for building a customized **GitHub Actions
 ## Features
 - Based on **summerwind/actions-runner-dind**.
 - Includes additional tools and dependencies:
-  - **Node.js 20** with npm.
-  - **Docker Buildx v0.19.1** plugin.
+  - **Node.js 20** with [node](https://hub.docker.com/_/node).
+  - **Docker Buildx v0.19.1** plugin with [buildx-bin](https://hub.docker.com/r/docker/buildx-bin).
   - **JDK support**:
     - `openjdk-11-jdk`
     - `openjdk-17-jdk`
