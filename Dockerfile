@@ -7,12 +7,15 @@ FROM node:20.11.0 AS node
 # Final Stage: Base image with DinD runner
 FROM summerwind/actions-runner-dind:v2.321.0-ubuntu-22.04
 
+# Set JDK_VERSION for later stages
+ARG JDK_VERSION=11
+
 # Switch to root user for installation
 USER root
 
 # Install required packages and Azure CLI
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    wget openjdk-11-jdk maven \
+    wget openjdk-${JDK_VERSION}-jdk maven \
     && curl -sL https://aka.ms/InstallAzureCLIDeb | bash \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
