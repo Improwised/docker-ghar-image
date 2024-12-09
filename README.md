@@ -14,18 +14,19 @@ This repository contains a Dockerfile for building a customized **GitHub Actions
 
 
 ## Features
-- Based on the **summerwind/actions-runner-dind** image for GitHub Actions.
+- Based on **summerwind/actions-runner-dind**.
 - Includes additional tools and dependencies:
-  - **Node.js** (via NodeSource setup script for Node.js 20)
-  - **Docker Buildx** plugin
-  - Other utilities: `wget`, `openjdk-11-jdk`, etc.
-- Built with an **Apache License 2.0**.
+  - **Node.js 20** with npm.
+  - **Docker Buildx v0.19.1** plugin.
+  - **JDK support**:
+    - `openjdk-11-jdk`
+    - `openjdk-17-jdk`
+  - Other utilities: `wget`, `curl`, and Azure CLI.
+- Built with **Apache License 2.0**.
 
 ## Repository Structure
-
-- `Dockerfile`: The Dockerfile for building the customized GitHub Actions Runner image.
-- `LICENSE`: The Apache License 2.0 under which this project is distributed.
-- `NOTICE`: Includes attributions and notices for third-party dependencies included in the Docker image.
+- `Dockerfile`: Contains the build instructions for the image.
+- `LICENSE` & `NOTICE`: Licensing details and attributions.
 
 ## License
 
