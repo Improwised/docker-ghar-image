@@ -1,6 +1,3 @@
-# Use default versions for jdk
-ARG JDK_VERSION="11"
-
 # Stage 1: Buildx
 FROM docker/buildx-bin:0.19.1 AS buildx
 
@@ -9,6 +6,9 @@ FROM node:20.11.0 AS node
 
 # Final Stage: Base image with DinD runner
 FROM summerwind/actions-runner-dind:v2.321.0-ubuntu-22.04
+
+# Set JDK_VERSION for later stages
+ARG JDK_VERSION=11
 
 # Switch to root user for installation
 USER root
