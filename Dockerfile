@@ -15,7 +15,8 @@ USER root
 
 # Install required packages and Azure CLI
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    wget openjdk-${JDK_VERSION}-jdk maven \
+    wget make build-essential \
+    openjdk-${JDK_VERSION}-jdk maven \
     && curl -sL https://aka.ms/InstallAzureCLIDeb | bash \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
