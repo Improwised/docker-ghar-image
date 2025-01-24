@@ -13,12 +13,16 @@ ARG JDK_VERSION=11
 # Switch to root user for installation
 USER root
 
-# Install required packages and Azure CLI
+# Install required packages Azure CLI, and AWS CLI
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    wget make build-essential \
+    wget make build-essential unzip mandoc less \
     openjdk-${JDK_VERSION}-jdk maven \
     && curl -sL https://aka.ms/InstallAzureCLIDeb | bash \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    && curl -sL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+    && unzip awscliv2.zip \
+    && ./aws/install \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* awscliv2.zip ./aws
 
 # Switch back to runner user
 USER runner
