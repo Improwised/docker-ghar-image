@@ -17,9 +17,10 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
       - name: Check Changes
-        uses: dorny/paths-filter@v3
         id: changes
+        uses: dorny/paths-filter@v3
         with:
           filters: |
             main:
@@ -35,40 +36,40 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.2.2
-        timeout-minutes: 5
-      
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v5
-        timeout-minutes: 5
-        with:
-          images: improwised/ghar-image
-          tags: |
-            type=raw,value={{branch}}-{{sha}}-{{date 'X'}}
-            type=raw,value=latest
-      
+        uses: actions/checkout@v4
+        timeout-minutes: 1
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         timeout-minutes: 5
-      
+
       - name: Login to DockerHub
+        if: ${{ github.ref_name == 'main' }}
         uses: docker/login-action@v3
-        timeout-minutes: 5
         with:
           username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      
-      - name: Set PR Tags
-        if: ${{ github.event_name == 'pull_request' }}
-        run: echo "TAGS=test-jdk-${{ matrix.jdk-version }}-${{ github.sha }}" >> $GITHUB_ENV
         timeout-minutes: 1
 
-      - name: Build and push
+      - name: Docker Meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: improwised/ghar-image
+          tags: |
+            type=sha,prefix={{branch}}-,suffix=-{{date 'X'}}
+            type=raw,prefix={{branch}}-,value=latest
+        timeout-minutes: 1
+
+      - name: Set PR Tags
+        if: ${{ github.event_name == 'pull_request' }}
+        run: echo "TAGS=test-main-${{ github.sha }}" >> $GITHUB_ENV
+
+      - name: Build and Push
         uses: docker/build-push-action@v6
-        timeout-minutes: 5
         with:
           context: .
+          file: Dockerfile
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: ${{ github.ref_name == 'main' }}
@@ -78,40 +79,37 @@ jobs:
 
   jdk-runner-image:
     needs: check-changes
-    if: ${{ needs. check-changes.outputs.jdk == 'true' }}
+    if: ${{ needs.check-changes.outputs.jdk == 'true' }}
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         jdk-version: ["11", "17"]
-
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.2.2
-        timeout-minutes: 5
-      
-      - name: Docker meta
-        id: meta
-        if: ${{ github.event_name == 'push' }}
-        uses: docker/metadata-action@v5
-        with:
-          images: improwised/ghar-image
-          tags: |
-            type=sha,prefix={{branch}}-${{ matrix.jdk-version }}-,suffix=-{{date 'X'}}
-            type=raw,prefix={{branch}}-${{ matrix.jdk-version }}-,value=latest
-        timeout-minutes: 2
+        uses: actions/checkout@v4
+        timeout-minutes: 1
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         timeout-minutes: 5
 
       - name: Login to DockerHub
-        if: ${{ github.ref_name == 'jdk' && github.event_name == 'push' }}
+        if: ${{ github.ref_name == 'main' }}
         uses: docker/login-action@v3
         with:
           username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-        timeout-minutes: 2
+        timeout-minutes: 1
+
+      - name: Docker Meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: improwised/ghar-image
+          tags: |
+            type=sha,prefix={{branch}}-jdk-${{ matrix.jdk-version }}-,suffix=-{{date 'X'}}
+            type=raw,prefix={{branch}}-jdk-${{ matrix.jdk-version }}-,value=latest
+        timeout-minutes: 1
 
       - name: Set PR Tags
         if: ${{ github.event_name == 'pull_request' }}
@@ -122,6 +120,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
+          file: Dockerfile.jdk
           build-args: |
             JDK_VERSION=${{ matrix.jdk-version }}
           cache-from: type=gha
