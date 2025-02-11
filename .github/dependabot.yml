@@ -19,18 +19,3 @@ updates:
     target-branch: "main"
     reviewers:
       - "Improwised/devops-technocrats"
-# Configuration for "jdk" branch
-  - package-ecosystem: "docker"
-    directory: "/"
-    schedule:
-      interval: "daily"
-    target-branch: "jdk"
-    reviewers:
-      - "Improwised/devops-technocrats"
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "daily"
-    target-branch: "jdk"
-    reviewers:
-      - "Improwised/devops-technocrats"

@@ -1,0 +1,51 @@
+name: image-build
+
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+    branches:
+      - "main"
+
+jobs:
+  check-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      main: ${{ steps.changes.outputs.main }}
+      jdk: ${{ steps.changes.outputs.jdk }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Check Changes
+        id: changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            main:
+              - ".github/workflows/main.yaml"
+              - "Dockerfile"
+            jdk:
+              - ".github/workflows/main.yaml"
+              - "Dockerfile.jdk"
+
+  main-runner-image:
+    needs: check-changes
+    if: ${{ needs.check-changes.outputs.main == 'true' }}
+    uses: ./.github/workflows/build.yaml
+    with:
+      dockerfile: "Dockerfile"
+      tags-prefix: ${{ github.ref_name }}
+
+  jdk-runner-image:
+    needs: check-changes
+    if: ${{ needs.check-changes.outputs.jdk == 'true' }}
+    strategy:
+      matrix:
+        jdk-version: ["11", "17"]
+    uses: ./.github/workflows/build.yaml
+    with:
+      dockerfile: "Dockerfile.jdk"
+      tags-prefix: "${{ github.ref_name }}-jdk-${{ matrix.jdk-version }}"
+      build-args: "JDK_VERSION=${{ matrix.jdk-version }}"
