@@ -38,14 +38,14 @@ jobs:
       dockerfile: "Dockerfile"
       tags-prefix: ${{ github.ref_name }}
 
-  # jdk-runner-image:
-  #   needs: check-changes
-  #   if: ${{ needs.check-changes.outputs.jdk == 'true' }}
-  #   strategy:
-  #     matrix:
-  #       jdk-version: ["11", "17"]
-  #   uses: ./.github/workflows/reusable-docker.yml
-  #   with:
-  #     dockerfile: "Dockerfile.jdk"
-  #     tags-prefix: "jdk-${{ matrix.jdk-version }}"
-  #     build-args: "JDK_VERSION=${{ matrix.jdk-version }}"
+  jdk-runner-image:
+    needs: check-changes
+    if: ${{ needs.check-changes.outputs.jdk == 'true' }}
+    strategy:
+      matrix:
+        jdk-version: ["11", "17"]
+    uses: ./.github/workflows/reusable-docker.yml
+    with:
+      dockerfile: "Dockerfile.jdk"
+      tags-prefix: "${{ github.ref_name }}-jdk-${{ matrix.jdk-version }}"
+      build-args: "JDK_VERSION=${{ matrix.jdk-version }}"
