@@ -36,7 +36,7 @@ jobs:
     uses: ./.github/workflows/build.yaml
     with:
       dockerfile: "Dockerfile"
-      tags-prefix: "main"
+      tags-prefix: ${{ github.ref_name }}
 
   # jdk-runner-image:
   #   needs: check-changes
