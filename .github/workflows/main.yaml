@@ -34,6 +34,7 @@ jobs:
     needs: check-changes
     if: ${{ needs.check-changes.outputs.main == 'true' }}
     uses: ./.github/workflows/build.yaml
+    secrets: inherit
     with:
       dockerfile: "Dockerfile"
       tags-prefix: ${{ github.ref_name }}
@@ -45,6 +46,7 @@ jobs:
       matrix:
         jdk-version: ["11", "17"]
     uses: ./.github/workflows/build.yaml
+    secrets: inherit
     with:
       dockerfile: "Dockerfile.jdk"
       tags-prefix: "${{ github.ref_name }}-jdk-${{ matrix.jdk-version }}"
