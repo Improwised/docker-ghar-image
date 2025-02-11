@@ -44,7 +44,7 @@ jobs:
     strategy:
       matrix:
         jdk-version: ["11", "17"]
-    uses: ./.github/workflows/reusable-docker.yml
+    uses: ./.github/workflows/build.yaml
     with:
       dockerfile: "Dockerfile.jdk"
       tags-prefix: "${{ github.ref_name }}-jdk-${{ matrix.jdk-version }}"
