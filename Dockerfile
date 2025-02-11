@@ -27,12 +27,12 @@ RUN set -ex; \
     php-pear libgd-tools \
     nodejs \
     git unzip wget make build-essential mandoc less \
-  curl -sL https://aka.ms/InstallAzureCLIDeb | bash && \
-  curl -sL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
-  unzip awscliv2.zip && \
-  ./aws/install && \
-  rm -rf /var/lib/apt/lists/* awscliv2.zip ./aws && \
-  apt-get clean && apt-get autoremove -y
+  && curl -sL "https://aka.ms/InstallAzureCLIDeb" | bash \
+  && curl -sL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+  && unzip awscliv2.zip \
+  && ./aws/install \
+  && rm -rf /var/lib/apt/lists/* awscliv2.zip ./aws \
+  && apt-get clean && apt-get autoremove -y
 
 # Switch back to the runner user
 USER runner
