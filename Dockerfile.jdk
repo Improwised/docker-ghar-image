@@ -2,7 +2,7 @@
 FROM docker/buildx-bin:0.20.1 AS buildx
 
 # Stage 2: Node.js
-FROM node:20.11.0 AS node
+FROM node:23.8.0 AS node
 
 # Final Stage: Base image with DinD runner
 FROM summerwind/actions-runner-dind:v2.322.0-ubuntu-22.04
