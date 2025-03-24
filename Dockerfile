@@ -1,14 +1,14 @@
 # Stage 1: Go
-FROM docker.io/library/golang:1.21.5 AS golang
+FROM library/golang:1.21.5 AS golang
 
 # Stage 2: Composer
-FROM docker.io/library/composer:2.1.14 AS composer
+FROM library/composer:2.1.14 AS composer
 
 # Stage 3: Buildx
-FROM docker.io/docker/buildx-bin:0.21.3 AS buildx
+FROM docker/buildx-bin:0.21.3 AS buildx
 
 # Final Stage: Base image with DinD runner
-FROM docker.io/summerwind/actions-runner-dind:v2.322.0-ubuntu-22.04
+FROM summerwind/actions-runner-dind:v2.323.0-ubuntu-22.04
 
 # Switch to root user for installation
 USER root
