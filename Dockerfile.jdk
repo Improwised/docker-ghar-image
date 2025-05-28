@@ -5,7 +5,7 @@ FROM docker/buildx-bin:0.24.0 AS buildx
 FROM node:20.11.0 AS node
 
 # Final Stage: Base image with DinD runner
-FROM summerwind/actions-runner-dind:v2.323.0-ubuntu-22.04
+FROM summerwind/actions-runner-dind:v2.324.0-ubuntu-22.04
 
 # Set JDK_VERSION for later stages
 ARG JDK_VERSION=11
