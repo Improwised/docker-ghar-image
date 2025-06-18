@@ -5,7 +5,7 @@ FROM library/golang:1.21.5 AS golang
 FROM library/composer:2.1.14 AS composer
 
 # Stage 3: Buildx
-FROM docker/buildx-bin:0.24.0 AS buildx
+FROM docker/buildx-bin:0.25.0 AS buildx
 
 # Final Stage: Base image with DinD runner
 FROM summerwind/actions-runner-dind:v2.325.0-ubuntu-22.04
