@@ -8,7 +8,7 @@ FROM library/composer:2.1.14 AS composer
 FROM docker/buildx-bin:0.25.0 AS buildx
 
 # Final Stage: Base image with DinD runner
-FROM summerwind/actions-runner-dind:v2.325.0-ubuntu-22.04
+FROM summerwind/actions-runner-dind:v2.326.0-ubuntu-22.04
 
 # Switch to root user for installation
 USER root
