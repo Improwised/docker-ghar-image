@@ -46,7 +46,9 @@ jobs:
       - name: Create Maven settings.xml
         run: |
           mkdir -p ~/.m2
-          echo "${{ vars.HATI_SETTINGS_XML }}" > ./settings.xml
+          cat <<'EOF' > ~/.m2/settings.xml
+          ${{ vars.MAVEN_SETTINGS_XML }}
+          EOF
 
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v6
