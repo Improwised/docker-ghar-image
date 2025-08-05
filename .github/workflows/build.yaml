@@ -43,6 +43,13 @@ jobs:
             type=raw,prefix=${{ inputs.tags-prefix }}-,value=latest
         timeout-minutes: 1
 
+      - name: Create Maven settings.xml
+        run: |
+          mkdir -p ~/.m2
+          cat <<'EOF' > settings.xml
+          ${{ secrets.HATI_SETTINGS_XML }}
+          EOF
+
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v6
         with:

@@ -5,7 +5,7 @@ FROM docker/buildx-bin:0.26.1 AS buildx
 FROM node:20.11.0 AS node
 
 # Final Stage: Base image with DinD runner
-FROM summerwind/actions-runner-dind:v2.326.0-ubuntu-22.04
+FROM summerwind/actions-runner-dind:v2.327.1-ubuntu-22.04
 
 # Set JDK_VERSION for later stages
 ARG JDK_VERSION=11
@@ -36,5 +36,4 @@ COPY --from=node /usr/local/bin /usr/local/bin
 # Copy Buildx binary from the Buildx stage
 COPY --from=buildx /buildx /usr/libexec/docker/cli-plugins/docker-buildx
 
-# Create necessary directories
-RUN mkdir -p /home/runner/.m2
+COPY settings.xml ~/.m2/settings.xml
