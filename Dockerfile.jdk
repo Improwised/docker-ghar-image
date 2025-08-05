@@ -37,3 +37,5 @@ COPY --from=node /usr/local/bin /usr/local/bin
 COPY --from=buildx /buildx /usr/libexec/docker/cli-plugins/docker-buildx
 
 COPY settings.xml /home/runner/.m2/settings.xml
+
+RUN chown runner:runner -R /home/runner/.m2
