@@ -47,7 +47,7 @@ jobs:
         run: |
           mkdir -p ~/.m2
           cat <<'EOF' > settings.xml
-          ${{ vars.HATI_SETTINGS_XML }}
+          ${{ secrets.HATI_SETTINGS_XML }}
           EOF
 
       - name: Build and Push Docker Image
