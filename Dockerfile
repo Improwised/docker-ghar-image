@@ -47,3 +47,4 @@ ENV PATH="/usr/local/go/bin:${PATH}"
 
 # Persist PATH for the runner user
 RUN echo "PATH=$PATH" >> /runnertmp/.env
+
