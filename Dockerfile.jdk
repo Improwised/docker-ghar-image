@@ -1,5 +1,5 @@
 # Stage 1: Buildx
-FROM docker/buildx-bin:0.29.1 AS buildx
+FROM docker/buildx-bin:0.30.1 AS buildx
 
 # Stage 2: Node.js
 FROM node:20.11.0 AS node
