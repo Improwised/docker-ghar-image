@@ -9,6 +9,9 @@ on:
       tags-prefix:
         required: true
         type: string
+      image-name:
+        required: true
+        type: string
       build-args:
         required: false
         type: string
@@ -37,7 +40,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v6
         with:
-          images: improwised/ghar-image
+          images: ${{ inputs.image-name }}
           tags: |
             type=sha,prefix=${{ inputs.tags-prefix }}-,suffix=-{{date 'X'}}
             type=raw,prefix=${{ inputs.tags-prefix }}-,value=latest
