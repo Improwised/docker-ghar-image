@@ -4,9 +4,6 @@ FROM library/golang:1.21.5 AS golang
 # Stage 2: Composer
 FROM library/composer:2.1.14 AS composer
 
-# Stage 3: Buildx
-FROM docker/buildx-bin:0.35.0 AS buildx
-
 # Final Stage: Base image with ARC runner
 FROM ghcr.io/actions/actions-runner:2.335.1
 
@@ -40,7 +37,6 @@ USER runner
 # Copy necessary binaries from previous stages
 COPY --from=golang "/usr/local/go/" "/usr/local/go/"
 COPY --from=composer "/usr/bin/composer" "/usr/local/bin/composer"
-COPY --from=buildx /buildx /usr/libexec/docker/cli-plugins/docker-buildx
 
 # Set PATH for Go
 ENV PATH="/usr/local/go/bin:${PATH}"
