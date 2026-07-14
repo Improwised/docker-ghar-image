@@ -18,6 +18,7 @@ jobs:
     outputs:
       main: ${{ steps.changes.outputs.main }}
       jdk: ${{ steps.changes.outputs.jdk }}
+      arc: ${{ steps.changes.outputs.arc }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v7
@@ -33,6 +34,9 @@ jobs:
             jdk:
               - ".github/workflows/main.yaml"
               - "Dockerfile.jdk"
+            arc:
+              - ".github/workflows/main.yaml"
+              - "Dockerfile.gha-runner-scale-set"
 
   main-runner-image:
     needs: check-changes
@@ -55,3 +59,13 @@ jobs:
       dockerfile: "Dockerfile.jdk"
       tags-prefix: "${{ github.ref_name }}-jdk-${{ matrix.jdk-version }}"
       build-args: "JDK_VERSION=${{ matrix.jdk-version }}"
+
+  gha-runner-scale-set-image:
+    needs: check-changes
+    if: ${{ needs.check-changes.outputs.arc == 'true' }}
+    uses: ./.github/workflows/build.yaml
+    secrets: inherit
+    with:
+      dockerfile: "Dockerfile.gha-runner-scale-set"
+      tags-prefix: ${{ github.ref_name }}
+      image-name: "improwised/gha-runner-scale-set"
