@@ -46,6 +46,7 @@ jobs:
     with:
       dockerfile: "Dockerfile"
       tags-prefix: ${{ github.ref_name }}
+      image-name: "improwised/ghar-image"
 
   jdk-runner-image:
     needs: check-changes
@@ -58,6 +59,7 @@ jobs:
     with:
       dockerfile: "Dockerfile.jdk"
       tags-prefix: "${{ github.ref_name }}-jdk-${{ matrix.jdk-version }}"
+      image-name: "improwised/ghar-image"
       build-args: "JDK_VERSION=${{ matrix.jdk-version }}"
 
   gha-runner-scale-set-image:

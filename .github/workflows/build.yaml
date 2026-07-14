@@ -10,9 +10,8 @@ on:
         required: true
         type: string
       image-name:
-        required: false
+        required: true
         type: string
-        default: 'improwised/ghar-image'
       build-args:
         required: false
         type: string
