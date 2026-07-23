@@ -6,13 +6,13 @@ on:
       - "main"
     paths:
       - "Dockerfile"
-      - ".github/workflows/main.yaml"
+      - ".github/workflows/build.yaml"
   pull_request:
     branches:
       - "main"
     paths:
       - "Dockerfile"
-      - ".github/workflows/main.yaml"
+      - ".github/workflows/build.yaml"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -48,12 +48,7 @@ jobs:
             type=raw,prefix=${{ github.ref_name }}-,value=latest
         timeout-minutes: 1
 
-      - name: Create Maven settings.xml
-        run: |
-          mkdir -p ~/.m2
-          cat <<'EOF' > settings.xml
-          ${{ secrets.HATI_SETTINGS_XML }}
-          EOF
+
 
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v7

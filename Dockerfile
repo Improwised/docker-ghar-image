@@ -5,7 +5,7 @@ FROM library/golang:1.21.5 AS golang
 FROM library/composer:2.1.14 AS composer
 
 # Final Stage: Base image with ARC runner
-FROM ghcr.io/actions/actions-runner:2.335.1
+FROM ghcr.io/actions/actions-runner:2.336.0
 
 # Switch to root user for installation
 USER root
