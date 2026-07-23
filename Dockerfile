@@ -4,11 +4,8 @@ FROM library/golang:1.21.5 AS golang
 # Stage 2: Composer
 FROM library/composer:2.1.14 AS composer
 
-# Stage 3: Buildx
-FROM docker/buildx-bin:0.35.0 AS buildx
-
-# Final Stage: Base image with DinD runner
-FROM summerwind/actions-runner-dind:v2.333.0-ubuntu-24.04
+# Final Stage: Base image with ARC runner
+FROM ghcr.io/actions/actions-runner:2.336.0
 
 # Switch to root user for installation
 USER root
@@ -40,11 +37,9 @@ USER runner
 # Copy necessary binaries from previous stages
 COPY --from=golang "/usr/local/go/" "/usr/local/go/"
 COPY --from=composer "/usr/bin/composer" "/usr/local/bin/composer"
-COPY --from=buildx /buildx /usr/libexec/docker/cli-plugins/docker-buildx
 
 # Set PATH for Go
 ENV PATH="/usr/local/go/bin:${PATH}"
 
 # Persist PATH for the runner user
-RUN echo "PATH=$PATH" >> /runnertmp/.env
-
+RUN echo "PATH=$PATH" >> /home/runner/.env

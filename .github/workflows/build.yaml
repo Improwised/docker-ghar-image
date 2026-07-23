@@ -1,20 +1,22 @@
-name: docker-build
+name: image-build
 
 on:
-  workflow_call:
-    inputs:
-      dockerfile:
-        required: true
-        type: string
-      tags-prefix:
-        required: true
-        type: string
-      image-name:
-        required: true
-        type: string
-      build-args:
-        required: false
-        type: string
+  push:
+    branches:
+      - "main"
+    paths:
+      - "Dockerfile"
+      - ".github/workflows/build.yaml"
+  pull_request:
+    branches:
+      - "main"
+    paths:
+      - "Dockerfile"
+      - ".github/workflows/build.yaml"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build-and-push:
@@ -40,25 +42,18 @@ jobs:
         id: meta
         uses: docker/metadata-action@v6
         with:
-          images: ${{ inputs.image-name }}
+          images: "improwised/gha-runner-scale-set"
           tags: |
-            type=sha,prefix=${{ inputs.tags-prefix }}-,suffix=-{{date 'X'}}
-            type=raw,prefix=${{ inputs.tags-prefix }}-,value=latest
+            type=sha,prefix=${{ github.ref_name }}-,suffix=-{{date 'X'}}
+            type=raw,prefix=${{ github.ref_name }}-,value=latest
         timeout-minutes: 1
 
-      - name: Create Maven settings.xml
-        run: |
-          mkdir -p ~/.m2
-          cat <<'EOF' > settings.xml
-          ${{ secrets.HATI_SETTINGS_XML }}
-          EOF
+
 
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v7
         with:
           context: .
-          file: ${{ inputs.dockerfile }}
-          build-args: ${{ inputs.build-args }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: ${{ github.ref_name == 'main' }}
