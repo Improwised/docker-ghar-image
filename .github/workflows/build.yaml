@@ -54,7 +54,6 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           context: .
-          file: "Dockerfile"
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: ${{ github.ref_name == 'main' }}
