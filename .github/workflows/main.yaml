@@ -4,38 +4,65 @@ on:
   push:
     branches:
       - "main"
+    paths:
+      - "Dockerfile"
+      - ".github/workflows/main.yaml"
   pull_request:
     branches:
       - "main"
+    paths:
+      - "Dockerfile"
+      - ".github/workflows/main.yaml"
 
 concurrency:
-  group: docker-ghar-image
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  check-changes:
+  build-and-push:
     runs-on: ubuntu-latest
-    outputs:
-      arc: ${{ steps.changes.outputs.arc }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v7
+        timeout-minutes: 1
 
-      - name: Check Changes
-        id: changes
-        uses: dorny/paths-filter@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+        timeout-minutes: 5
+
+      - name: Login to DockerHub
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: docker/login-action@v4
         with:
-          filters: |
-            arc:
-              - ".github/workflows/main.yaml"
-              - "Dockerfile"
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+        timeout-minutes: 1
 
-  gha-runner-scale-set-image:
-    needs: check-changes
-    if: ${{ needs.check-changes.outputs.arc == 'true' }}
-    uses: ./.github/workflows/build.yaml
-    secrets: inherit
-    with:
-      dockerfile: "Dockerfile"
-      tags-prefix: ${{ github.ref_name }}
-      image-name: "improwised/gha-runner-scale-set"
+      - name: Docker Meta
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: "improwised/gha-runner-scale-set"
+          tags: |
+            type=sha,prefix=${{ github.ref_name }}-,suffix=-{{date 'X'}}
+            type=raw,prefix=${{ github.ref_name }}-,value=latest
+        timeout-minutes: 1
+
+      - name: Create Maven settings.xml
+        run: |
+          mkdir -p ~/.m2
+          cat <<'EOF' > settings.xml
+          ${{ secrets.HATI_SETTINGS_XML }}
+          EOF
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: "Dockerfile"
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          push: ${{ github.ref_name == 'main' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          annotations: ${{ steps.meta.outputs.annotations }}
